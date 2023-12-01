@@ -1,5 +1,5 @@
-﻿using Autofac;
-using ConsoleMitDI.Services;
+﻿using ConsoleMitDI.Services;
+using Unity;
 
 namespace ConsoleMitDI
 {
@@ -7,24 +7,21 @@ namespace ConsoleMitDI
     {
         static void Main(string[] args)
         {
-            var container = GetContainer();
+            var container = GetServices();
 
-            using (var scope = container.BeginLifetimeScope())
+            using (var form = container.Resolve<Form1, Options>(new Options { ConnectionString = "123 abc Datenbank" }))
             {
-                using (var form = scope.Resolve<Form1>())
-                {
-                    form.ShowDialog();
-                }
+                form.ShowDialog();
             }
 
-            IContainer GetContainer()
+            UnityContainer GetServices()
             {
-                var builder = new ContainerBuilder();
-                builder.RegisterType<Database>().As<IDatabase>();
-                builder.RegisterType<SayHello>().As<ISayHello>();
-                builder.RegisterType<Form1>();
+                var services = new UnityContainer();
+                services.RegisterType<IDatabase, Database>();
+                services.RegisterType<ISayHello, SayHello>();
+                services.RegisterType<Form1>();
 
-                return builder.Build();
+                return services;
             }
         }
     }

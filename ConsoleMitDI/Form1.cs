@@ -7,11 +7,13 @@ namespace ConsoleMitDI
     {
         private readonly IDatabase _database;
         private readonly ISayHello _sayHello;
+        private readonly Options _options;
 
-        public Form1(IDatabase database, ISayHello sayHello)
+        public Form1(IDatabase database, ISayHello sayHello, Options options)
         {
             _database = database;
             _sayHello = sayHello;
+            _options = options;
 
             InitializeComponent();
         }
@@ -26,5 +28,15 @@ namespace ConsoleMitDI
             string irgendwas = _database.GetIrgendwas();
             label1.Text = $@"Der Text aus der Datenbank: {irgendwas}";
         }
+
+        private void button3_Click(object sender, System.EventArgs e)
+        {
+            label2.Text = $@"Der ConnectionString aus den Options: {_options.ConnectionString}";
+        }
+    }
+
+    public class Options
+    {
+        public string ConnectionString { get; set; }
     }
 }
